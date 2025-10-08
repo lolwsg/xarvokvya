@@ -10,7 +10,8 @@
     "express": "^4.18.2",
     "cors": "^2.8.5",
     "node-fetch": "^3.3.2",
-    "serverless-http": "^3.2.0"  <-- ADD THIS LINE
+    "serverless-http": "^3.2.0"  ,  <-- ADD THIS COMMA!
+    "emailjs-com": "^3.2.0"  <-- REMOVE THIS LINE IF YOU ADDED IT, IT'S NOT NEEDED FOR THE BACKEND
   },
   "engines": {
     "node": "18.x"
