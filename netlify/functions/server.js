@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const fetch = require('node-fetch');
+// const fetch = require('node-fetch'); // This line is removed, using native fetch
 const serverless = require('serverless-http'); // New dependency!
 
 const app = express();
@@ -18,10 +18,10 @@ const TARGET_EMAIL = process.env.TARGET_EMAIL;
 // Helper function to get OS
 function getOS(userAgent) {
     if (userAgent.includes("Win")) return "Windows";
-    if (userAgent.includes("Mac")) return "macOS";
-    if (userAgent.includes("Linux")) return "Linux";
-    if (userAgent.includes("Android")) return "Android";
-    if (userAgent.includes("iPhone")) return "iOS";
+    if (userAgent.includes("Mac")) return "macOS");
+    if (userAgent.includes("Linux")) return "Linux");
+    if (userAgent.includes("Android")) return "Android");
+    if (userAgent.includes("iPhone")) return "iOS");
     return "Unknown";
 }
 
@@ -42,6 +42,7 @@ app.post('/api/track', async (req, res) => {
         const visitorIP = req.headers['x-forwarded-for']?.split(',')[0].trim() || req.connection.remoteAddress;
         
         // --- Fetch detailed IP info from ipapi.co ---
+        // Using native fetch API
         const ipResponse = await fetch(`https://ipapi.co/${visitorIP}/json/`);
         const ipData = await ipResponse.json();
         
@@ -102,6 +103,7 @@ ONLINE STATUS: ${onlineStatus || 'unknown'}`
         };
         
         // --- Send email using EmailJS (server-side API) ---
+        // Using native fetch API
         const emailResponse = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
             method: 'POST',
             headers: {
