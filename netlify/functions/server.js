@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
-// const fetch = require('node-fetch'); // This line is removed, using native fetch
-const serverless = require('serverless-http'); // New dependency!
+// const fetch = require('node-fetch'); // This line is REMOVED/COMMENTED OUT
+const serverless = require('serverless-http');
 
 const app = express();
 
@@ -42,7 +42,7 @@ app.post('/api/track', async (req, res) => {
         const visitorIP = req.headers['x-forwarded-for']?.split(',')[0].trim() || req.connection.remoteAddress;
         
         // --- Fetch detailed IP info from ipapi.co ---
-        // Using native fetch API
+        // Using native fetch API (no 'require("node-fetch")' needed)
         const ipResponse = await fetch(`https://ipapi.co/${visitorIP}/json/`);
         const ipData = await ipResponse.json();
         
