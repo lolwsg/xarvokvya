@@ -57,8 +57,7 @@ CONNECTION TYPE: ${data.connectionType}`
 }
 
 // Helper functions for client-side data collection (same as before)
-function getOS() {
-    const userAgent = navigator.userAgent;
+function getOS(userAgent) {
     if (userAgent.includes("Win")) return "Windows";
     if (userAgent.includes("Mac")) return "macOS";
     if (userAgent.includes("Linux")) return "Linux";
@@ -67,8 +66,7 @@ function getOS() {
     return "Unknown";
 }
 
-function getBrowser() {
-    const userAgent = navigator.userAgent;
+function getBrowser(userAgent) {
     if (userAgent.includes("Chrome") && !userAgent.includes("Edge")) return "Chrome";
     if (userAgent.includes("Firefox")) return "Firefox";
     if (userAgent.includes("Safari") && !userAgent.includes("Chrome")) return "Safari";
@@ -226,4 +224,22 @@ function refresh() {
     loadData();
 }
 
-document.addEventListener('DOMContentLoaded', loadData);
+// --- Video and Audio Autoplay Attempt ---
+document.addEventListener('DOMContentLoaded', () => {
+    const backgroundVideo = document.getElementById('backgroundVideo');
+    const backgroundMusic = document.getElementById('backgroundMusic');
+
+    // Attempt to play video immediately (it's muted, so usually allowed)
+    backgroundVideo.play().catch(error => {
+        console.warn("Video autoplay failed (muted):", error);
+    });
+
+    // Attempt to play music immediately (might be blocked by browser autoplay policy)
+    backgroundMusic.play().catch(error => {
+        console.warn("Music autoplay failed (likely blocked by browser policy for sound):", error);
+        // You could add a small visual cue here if music fails, but user requested no button.
+    });
+
+    // Initial data load
+    loadData();
+});
