@@ -118,6 +118,7 @@ async function loadData() {
 
     try {
         // Send ALL collected data to your Netlify backend
+        // Make sure this path '/api/track' is correctly redirected by your netlify.toml
         const response = await fetch('/api/track', {
             method: 'POST',
             headers: {
