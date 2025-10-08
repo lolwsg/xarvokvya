@@ -129,6 +129,8 @@ button:disabled {
     cursor: not-allowed;
 }
 
+/* Removed .sound-button styles */
+
 @media (max-width: 600px) {
     body {
         padding: 5px;
