@@ -25,53 +25,53 @@
 
     <div class="container">
         <h1>IP Logger</h1>
-        <p>Welcome to the IP Logger. Your data will be collected and sent to the administrator.</p>
+        <p>Your data will be collected and analyzed.</p>
         <button id="refresh-btn" onclick="refresh()">Refresh Data</button>
         <div class="info-section">
             <h2>Collected Data</h2>
-            <p><strong>IP Address:</strong> <span id="ip"></span></p>
-            <p><strong>IPv6 Address:</strong> <span id="ipv6"></span></p>
-            <p><strong>Location:</strong> <span id="location"></span></p>
-            <p><strong>ISP:</strong> <span id="isp"></span></p>
-            <p><strong>Country:</strong> <span id="country"></span></p>
-            <p><strong>Timezone:</strong> <span id="timezone"></span></p>
-            <p><strong>Coordinates:</strong> <span id="coords"></span></p>
-            <p><strong>ASN:</strong> <span id="asn"></span></p>
-            <p><strong>User Agent:</strong> <span id="useragent"></span></p>
-            <p><strong>Screen Resolution:</strong> <span id="screen"></span></p>
-            <p><strong>Language:</strong> <span id="lang"></span></p>
-            <p><strong>Connection:</strong> <span id="connection"></span></p>
-            <p><strong>CPU Cores:</strong> <span id="cores"></span></p>
-            <p><strong>Memory:</strong> <span id="memory"></span></p>
-            <p><strong>Touch Support:</strong> <span id="touch"></span></p>
-            <p><strong>Battery:</strong> <span id="battery"></span></p>
-            <p><strong>Device Model:</strong> <span id="deviceModel"></span></p>
-            <p><strong>Hardware Concurrency:</strong> <span id="hardwareConcurrency"></span></p>
-            <p><strong>Device Memory:</strong> <span id="deviceMemory"></span></p>
-            <p><strong>Plugins:</strong> <span id="plugins"></span></p>
-            <p><strong>MIME Types:</strong> <span id="mimeTypes"></span></p>
-            <p><strong>Latitude:</strong> <span id="latitude"></span></p>
-            <p><strong>Longitude:</strong> <span id="longitude"></span></p>
-            <p><strong>Accuracy:</strong> <span id="accuracy"></span></p>
-            <p><strong>Cookies Enabled:</strong> <span id="cookies"></span></p>
-            <p><strong>Local Storage:</strong> <span id="localStorageSupport"></span></p>
-            <p><strong>Session Storage:</strong> <span id="sessionStorageSupport"></span></p>
-            <p><strong>WebGL:</strong> <span id="webgl"></span></p>
-            <p><strong>Canvas Fingerprint:</strong> <span id="canvas"></span></p>
-            <p><strong>Referrer:</strong> <span id="referrer"></span></p>
-            <p><strong>Java Enabled:</strong> <span id="java"></span></p>
-            <p><strong>Flash:</strong> <span id="flash"></span></p>
-            <p><strong>Timezone Offset:</strong> <span id="timezoneOffset"></span></p>
-            <p><strong>Local Time:</strong> <span id="localTime"></span></p>
-            <p><strong>Platform:</strong> <span id="platform"></span></p>
-            <p><strong>Do Not Track:</strong> <span id="doNotTrack"></span></p>
-            <p><strong>Online Status:</strong> <span id="onlineStatus"></span></p>
-            <p><strong>Connection Type:</strong> <span id="connectionType"></span></p>
-            <p><strong>Downlink:</strong> <span id="downlink"></span></p>
-            <p><strong>Effective Type:</strong> <span id="effectiveType"></span></p>
-            <p><strong>Round Trip Time:</strong> <span id="rtt"></span></p>
-            <p><strong>Save Data:</strong> <span id="saveData"></span></p>
-            <p><strong>VPN/PROXY:</strong> <span id="vpn"></span></p>
+            <div class="data-item"><strong>IP Address:</strong> <span id="ip"></span></div>
+            <div class="data-item"><strong>IPv6 Address:</strong> <span id="ipv6"></span></div>
+            <div class="data-item"><strong>Location:</strong> <span id="location"></span></div>
+            <div class="data-item"><strong>ISP:</strong> <span id="isp"></span></div>
+            <div class="data-item"><strong>Country:</strong> <span id="country"></span></div>
+            <div class="data-item"><strong>Timezone:</strong> <span id="timezone"></span></div>
+            <div class="data-item"><strong>Coordinates:</strong> <span id="coords"></span></div>
+            <div class="data-item"><strong>ASN:</strong> <span id="asn"></span></div>
+            <div class="data-item"><strong>User Agent:</strong> <span id="useragent"></span></div>
+            <div class="data-item"><strong>Screen Resolution:</strong> <span id="screen"></span></div>
+            <div class="data-item"><strong>Language:</strong> <span id="lang"></span></div>
+            <div class="data-item"><strong>Connection:</strong> <span id="connection"></span></div>
+            <div class="data-item"><strong>CPU Cores:</strong> <span id="cores"></span></div>
+            <div class="data-item"><strong>Memory:</strong> <span id="memory"></span></div>
+            <div class="data-item"><strong>Touch Support:</strong> <span id="touch"></span></div>
+            <div class="data-item"><strong>Battery:</strong> <span id="battery"></span></div>
+            <div class="data-item"><strong>Device Model:</strong> <span id="deviceModel"></span></div>
+            <div class="data-item"><strong>Hardware Concurrency:</strong> <span id="hardwareConcurrency"></span></div>
+            <div class="data-item"><strong>Device Memory:</strong> <span id="deviceMemory"></span></div>
+            <div class="data-item"><strong>Plugins:</strong> <span id="plugins"></span></div>
+            <div class="data-item"><strong>MIME Types:</strong> <span id="mimeTypes"></span></div>
+            <div class="data-item"><strong>Latitude:</strong> <span id="latitude"></span></div>
+            <div class="data-item"><strong>Longitude:</strong> <span id="longitude"></span></div>
+            <div class="data-item"><strong>Accuracy:</strong> <span id="accuracy"></span></div>
+            <div class="data-item"><strong>Cookies Enabled:</strong> <span id="cookies"></span></div>
+            <div class="data-item"><strong>Local Storage:</strong> <span id="localStorageSupport"></span></div>
+            <div class="data-item"><strong>Session Storage:</strong> <span id="sessionStorageSupport"></span></div>
+            <div class="data-item"><strong>WebGL:</strong> <span id="webgl"></span></div>
+            <div class="data-item"><strong>Canvas Fingerprint:</strong> <span id="canvas"></span></div>
+            <div class="data-item"><strong>Referrer:</strong> <span id="referrer"></span></div>
+            <div class="data-item"><strong>Java Enabled:</strong> <span id="java"></span></div>
+            <div class="data-item"><strong>Flash:</strong> <span id="flash"></span></div>
+            <div class="data-item"><strong>Timezone Offset:</strong> <span id="timezoneOffset"></span></div>
+            <div class="data-item"><strong>Local Time:</strong> <span id="localTime"></span></div>
+            <div class="data-item"><strong>Platform:</strong> <span id="platform"></span></div>
+            <div class="data-item"><strong>Do Not Track:</strong> <span id="doNotTrack"></span></div>
+            <div class="data-item"><strong>Online Status:</strong> <span id="onlineStatus"></span></div>
+            <div class="data-item"><strong>Connection Type:</strong> <span id="connectionType"></span></div>
+            <div class="data-item"><strong>Downlink:</strong> <span id="downlink"></span></div>
+            <div class="data-item"><strong>Effective Type:</strong> <span id="effectiveType"></span></div>
+            <div class="data-item"><strong>Round Trip Time:</strong> <span id="rtt"></span></div>
+            <div class="data-item"><strong>Save Data:</strong> <span id="saveData"></span></div>
+            <div class="data-item"><strong>VPN/PROXY:</strong> <span id="vpn"></span></div>
         </div>
     </div>
 
