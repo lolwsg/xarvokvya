@@ -159,6 +159,7 @@ async function getGeolocation() {
                     });
                 },
                 (error) => {
+                    console.error('Geolocation error:', error);
                     resolve({ latitude: 'unavailable', longitude: 'unavailable', accuracy: 'unavailable' });
                 }
             );
@@ -179,6 +180,7 @@ async function loadData() {
         // Fetch IP details from ipapi.co (client-side)
         const ipResponse = await fetch('https://ipapi.co/json/');
         const ipData = await ipResponse.json();
+        console.log('IP Data:', ipData);
 
         collectedData.ip = ipData.ip || 'error';
         collectedData.location = `${ipData.city || 'unknown'}, ${ipData.region || 'unknown'}, ${ipData.country_name || 'unknown'}`;
