@@ -3,7 +3,7 @@ body, html {
     padding: 0;
     height: 100%;
     overflow: hidden;
-    font-family: Arial, sans-serif;
+    font-family: 'Arial', sans-serif;
     background-color: #000;
     color: #fff;
 }
@@ -45,6 +45,8 @@ body, html {
     z-index: 100;
     text-align: center;
     padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
 }
 
 h1 {
@@ -68,8 +70,12 @@ p {
     text-shadow: 2px 2px 4px #000;
 }
 
-.info-section p {
+.data-item {
     font-size: 1.1em;
+    margin: 10px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 button {
