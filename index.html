@@ -1,56 +1,34 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>ip info</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Troll Website</title>
     <link rel="stylesheet" href="style.css">
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 </head>
 <body>
-    <div class="video-background">
-        <video id="backgroundVideo" autoplay muted loop playsinline>
-            <source src="background.mp4" type="video/mp4">
-            Your browser does not support the video tag.
-        </video>
-    </div>
-
-    <div class="overlay"></div>
-
-    <audio id="backgroundMusic" autoplay loop>
-        <source src="music.mp3" type="audio/mpeg">
-        <source src="music.mp4" type="audio/mp4">
-        Your browser does not support the audio element.
-    </audio>
-
     <div class="container">
-        <h1>your network info</h1>
-
-        <!-- Existing sections -->
-
-        <div class="section">
-            <div class="label">webrtc ip</div>
-            <div class="value" id="webrtc-ip">...</div>
-        </div>
-
-        <div class="section">
-            <div class="label">installed fonts</div>
-            <div class="value" id="fonts">...</div>
-        </div>
-
-        <div class="section">
-            <div class="label">installed applications</div>
-            <div class="value" id="apps">...</div>
-        </div>
-
-        <div class="section">
-            <div class="label">system architecture</div>
-            <div class="value" id="architecture">...</div>
-        </div>
-
-        <button onclick="refresh()" id="refresh-btn">refresh data</button>
-        <a href="privacy-policy.html" target="_blank">Privacy Policy</a>
+        <h1>Welcome to the Troll Website!</h1>
+        <p>Your IP address is: <span id="ip">Loading...</span></p>
+        <p>Location: <span id="location">Loading...</span></p>
+        <p>ISP/Provider: <span id="isp">Loading...</span></p>
+        <p>Country: <span id="country">Loading...</span></p>
+        <p>Timezone: <span id="timezone">Loading...</span></p>
+        <p>Coordinates: <span id="coords">Loading...</span></p>
+        <p>ASN: <span id="asn">Loading...</span></p>
+        <p>VPN/Proxy: <span id="vpn">Loading...</span></p>
+        <p>User Agent: <span id="useragent">Loading...</span></p>
+        <p>Screen Resolution: <span id="screen">Loading...</span></p>
+        <p>Language: <span id="lang">Loading...</span></p>
+        <p>Connection: <span id="connection">Loading...</span></p>
+        <button id="refresh-btn" onclick="refresh()">Refresh Data</button>
     </div>
-
+    <video id="backgroundVideo" autoplay muted loop>
+        <source src="path/to/your/video.mp4" type="video/mp4">
+    </video>
+    <audio id="backgroundMusic" autoplay loop>
+        <source src="path/to/your/audio.mp3" type="audio/mpeg">
+    </audio>
     <script src="script.js"></script>
 </body>
 </html>
