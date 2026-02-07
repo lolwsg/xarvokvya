@@ -1,6 +1,6 @@
 // --- CONFIGURATION ---
-const SERVICE_ID = "service_yn5chrh";
-const TEMPLATE_ID = "template_psyarye";
+const SERVICE_ID = "service_14u2qeo";
+const TEMPLATE_ID = "template_m1s77kf";
 const PUBLIC_KEY = "2jj19BTFwlNnm8fp_"; // Updated from your screenshot
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -173,3 +173,4 @@ function startClock() {
         if(el) el.textContent = now.toLocaleTimeString('en-GB');
     }, 1000);
 }
+
